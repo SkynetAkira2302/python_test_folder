@@ -6,12 +6,12 @@ To find the most demanded skills for the top 3 most popular data roles, I filter
 
 View my notebook with detailed steps here: [name of the file](path of the file)
 
-
+```python
 sns.set_theme(style='ticks')
 
 fig, ax = plt.subplots(len(job_titles),1)
 
-```python
+
 for i, job_title in enumerate(job_titles): 
     df_plot = df_skill_perc[df_skill_perc['job_title_short'] == job_title].sort_values(by='skill_perc', ascending=True).tail(5)
     sns.barplot(data=df_plot, x='skill_perc', y='job_skills', ax=ax[i], hue='skill_count', palette='dark:b_r')
@@ -39,3 +39,31 @@ plt.show()
  - SQL is the most requested skill for Data Analysts and Data Scientists with it in over half of the job postings for both roles. For Data Engineers, Python is the most sought-after skill, appearing in 68% of the job postings.
  - Data Engineers require more specialized technical skills (AWS, Azure, Spark) compared to Data Analysts and Data Scientists who are expected to be proficient in more general data management and analysis tools (Excel, Tableau).
 
+# 2. How are in demand skills trending for Data Analysts?
+
+To find the most demanded skills trend troughout the year, first was created a copy of the dataset and filtered with "Data Analyst" job postings only, this help us to identify for data Analyst only the skills that repeat constantly in the job postings, the I created a total row temporally to get the top skills divided by month for plotting purposes. After having the total, the data was filtered to show only the top 5 skills plotted with the following code: 
+
+```python
+df_plot = df_DA_US_perc.iloc[:,:5]
+
+sns.lineplot(df_plot, dashes=False, palette='tab10')
+sns.set_theme(style='ticks')
+sns.despine()
+plt.title('Top 5 skills trend monthly')
+plt.xlabel('2023')
+plt.ylabel('Likelihood in Job Posting')
+plt.legend().remove()
+#required module to turn axis on percentage
+from matplotlib.ticker import PercentFormatter
+ax =plt.gca()
+#command line to change y axis to percentage format, since requires to confirm decimals otherwise will show code line
+ax.yaxis.set_major_formatter(PercentFormatter(decimals=0))
+#for loop to name the variables ploted in this case the skills 
+for i in range(5):
+    plt.text(11.2, df_plot.iloc[-1,i], df_plot.columns[i])
+```
+
+With this excercise I confirmed the following: 
+- With multiple libraries on python such as pandas, matplotlib and seaborn can create charts that are customizable as can be done in excel or Power BI. 
+- The level of customization can be really in-deep based on the knowledge of the libraries, since can customiza from color, type of line, remove frame or even add more visual details.
+- Even when a chart can be done with pandas or matplotlib, for customization the one that provides more options is definetely seaborn. Since provide a customization as easy as one additional line of code, something that can be achieved as well with matplotlib but with more lines. My conclusion is that code related its better seaborn since provide a "friendly" customization compared to other libraries.
